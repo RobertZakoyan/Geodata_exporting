@@ -18,6 +18,8 @@ def main():
     elif sys.argv[3] == 'xlsx':
         df = pd.DataFrame(gdf)
         df.to_excel(f"c:\\Users\\Robert\\Desktop\\Geo_data\\{file_name}.xlsx")
+    else:
+        return "doesnt support this extention"
 if __name__ == '__main__':
     main()
 
