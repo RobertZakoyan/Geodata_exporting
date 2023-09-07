@@ -8,9 +8,6 @@ fiona.supported_drivers['KML'] = 'rw'
 my_db_file = r"c:\Users\Robert\Desktop\small.sqlite"
 
 def main():
-    inp_file_path = sys.argv[1]
-    exp_file_path = sys.argv[2]
-    inp_extention = sys.argv[3]
     gdf = gpd.read_file(inp_file_path)
     file_name = os.path.basename(inp_file_path).split('.')[0]
     print(file_name)
@@ -24,5 +21,8 @@ def main():
     else:
         return "doesnt support this extention"
 if __name__ == '__main__':
+    inp_file_path = sys.argv[1]
+    exp_file_path = sys.argv[2]
+    inp_extention = sys.argv[3]
     main()
 
