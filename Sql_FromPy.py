@@ -1,21 +1,23 @@
 import psycopg2
-print("hello1")
+import geopandas as gpd
 con_database="postgres",
 con_user="postgres",
 con_password="masis22016",
 con_host="localhost",
 con_port = 5432,
 conn = None
-cur = None  
-table_read = "SELECT * FROM road_data"
-table_create = "CREATE TABLE locations_table(id INT PRIMARY KEY, x_coordinate DOUBLE PRECISION, y_coordinate DOUBLE PRECISION, geom GEOMETRY)"
+cur = None 
+
+
+
+
 def main():
     try:
         cur.execute(table_create)
         conn.commit()
         
     except:
-        raise Exception("Sorry, you have problem in your code")
+        raise Exception("Sorry, you have problem in your code or table already exists")
     finally:
         cur.close()
         conn.close()
@@ -26,5 +28,3 @@ if __name__ == "__main__":
 
     table_create = "CREATE TABLE locations_table(id INT PRIMARY KEY, x_coordinate DOUBLE PRECISION, y_coordinate DOUBLE PRECISION, geom geometry)"
     main()
-print("helloas")
-print("helloas")
