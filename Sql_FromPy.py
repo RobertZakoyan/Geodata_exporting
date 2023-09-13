@@ -5,6 +5,8 @@ from sqlalchemy import create_engine
 from shapely.geometry import box
 from shapely import wkb
 import matplotlib.pyplot as plt
+import matplotlib.patches as patches
+from shapely.geometry import Polygon
 
 db_path = r"c:\Users\Robert\Desktop\road_data.sql"
 engine = create_engine('postgresql://postgres:masis22016@localhost:5432/postgres')
@@ -12,7 +14,6 @@ query = 'SELECT * FROM road_data'
 df = pd.read_sql(query, engine)
 df['geometry'] = df['geom'].apply(lambda wkb_data: wkb.loads(bytes.fromhex(wkb_data)) if wkb_data else None)
 gdf = gpd.GeoDataFrame(df, geometry='geometry')
-
 
 gdf['bounding_box'] = gdf['geometry'].envelope
 
@@ -22,17 +23,30 @@ gdf['y_min'] = gdf['bounding_box'].apply(lambda box: box.bounds[1] if box else N
 gdf['x_max'] = gdf['bounding_box'].apply(lambda box: box.bounds[2] if box else None)
 gdf['y_max'] = gdf['bounding_box'].apply(lambda box: box.bounds[3] if box else None)
 
-print(gdf[['x_min', 'y_min', 'x_max', 'y_max']])
-fig, ax = plt.subplots(figsize=(10, 10))
-gdf.boundary.plot(ax=ax, color='blue', linewidth=2)
+# Create a figure and axis
+fig, ax = plt.subplots(figsize=(8, 8))
+
+# Plot the bounding box
+gdf.boundary.plot(ax=ax, color="red", linewidth=2)
+
+# Set aspect ratio to 'equal'
+ax.set_aspect('equal')
+
+# Set axis limits
+ax.set_xlim(gdf['x_min'].min() - 1000, gdf['x_max'].max() + 1000)
+ax.set_ylim(gdf['y_min'].min() - 1000, gdf['y_max'].max() + 1000)
+
+# Show the plot
+plt.show()
+# gdf.boundary.plot(ax=ax, color='blue', linewidth=2)
 
 # Plot the road data (assuming you have a GeoDataFrame 'road_gdf' containing road geometries)
 # road_gdf.plot(ax=ax, color='red', linewidth=1)
 
 # Customize the plot as needed
-ax.set_aspect('equal')
-ax.set_title('Bounding Boxes and Road Data')
-plt.show()
+# ax.set_aspect('equal')
+# ax.set_title('Bounding Boxes and Road Data')
+# plt.show()
 # connection = psycopg2.connect(database="postgres", user="postgres", password="masis22016", host="localhost", port="5432")
 # query = "SELECT * FROM road_data"
 # df = pd.read_sql_query(query, connection)
